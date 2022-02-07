@@ -46,7 +46,8 @@
     "target",
     "typings",
     "flow-typed",
-    "tsconfig.es5.json"
+    "tsconfig.es5.json",
+    "tsconfig.json"
   ],
   "resolutions": {
     "**/postcss": "^8.2.15",
