@@ -45,7 +45,8 @@
     "CHANGELOG.md",
     "target",
     "typings",
-    "flow-typed"
+    "flow-typed",
+    "tsconfig.es5.json"
   ],
   "resolutions": {
     "**/postcss": "^8.2.15",
