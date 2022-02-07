@@ -229,7 +229,7 @@ describe('index', () => {
       )
 
       expect(log).toHaveBeenCalledWith('Publishing docs via gh-pages')
-      expect(log).toHaveBeenCalledWith('Docs published successfully, branch=doc-branch, src=./**/*, dst=root')
+      expect(log).toHaveBeenCalledWith('Docs published successfully, branch=doc-branch, src=./docs, dst=root')
 
       expect(ghpagesPublish).toHaveBeenCalledWith(DEFAULT_BASE_DIR, expectedOpts, expect.any(Function))
       expect(res).toBe(OK)
@@ -252,7 +252,7 @@ describe('index', () => {
       await publish(pluginConfig, context)
 
       expect(log).toHaveBeenCalledWith('Publishing docs via gh-pages')
-      expect(log).toHaveBeenCalledWith('Docs published successfully, branch=gh-pages, src=./**/*, dst=.')
+      expect(log).toHaveBeenCalledWith('Docs published successfully, branch=gh-pages, src=./docs, dst=.')
     })
 
     it('throws rejection on gh-pages fail', async () => {
