@@ -78,8 +78,9 @@ or even shorter if default settings are used:
 
 | Option          | Description                                             | Default |
 |-----------------|---------------------------------------------------------| --------|
+| `dir`           | The [base directory](https://github.com/tschaub/gh-pages#dir) for all source files (those listed in the src config property).              | '.'     |  
 | `msg`           | Commit message template                                 | `docs updated <%= nextRelease.gitTag %>` |
-| `src`           | Documentation directory                                 | `docs`<br/><br/>**NOTE** don't forget to run docs builder (`yarn docs`, `yarn typedoc`, etc) as a part of your build step or any other way|
+| `src`           | The [minimatch pattern](https://github.com/tschaub/gh-pages#optionssrc) or array of patterns used to select which files should be published.                  | `docs`<br/><br/>**NOTE** don't forget to run docs builder (`yarn docs`, `yarn typedoc`, etc) as a part of your build step or any other way|
 | `dst`           | Destination directory                                   | `.` (root) |
 | `branch`        | Docs branch to push                                     | `gh-pages` |
 | `branches`      | Optional list of src-to-target branches association. If defined it suppresses `branch` option. For example, `[['master', 'gh-pages'], ['beta', beta-docs]]`             | undefined |
