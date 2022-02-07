@@ -37,7 +37,8 @@
     "coveralls:push": "cat ./coverage/lcov.info | coveralls || exit 0",
     "docs": "typedoc src/main/ts",
     "postupdate": "yarn && npm_config_yes=true npx yarn-audit-fix && yarn test:deps && yarn build && yarn test",
-    "publish:beta": "npm publish --no-git-tag-version --tag beta"
+    "publish:beta": "npm publish --no-git-tag-version --tag beta",
+    "postinstall": "npm run build"
   },
   "files": [
     "README.md",
