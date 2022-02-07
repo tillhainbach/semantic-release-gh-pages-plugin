@@ -8,6 +8,7 @@ import readPkg from 'read-pkg'
 import request from 'then-request'
 
 import {
+  DEFAULT_BASE_DIR,
   DEFAULT_BRANCH,
   DEFAULT_DST,
   DEFAULT_ENTERPRISE,
@@ -21,6 +22,7 @@ import { anyDefined, catchToSmth } from './util'
 const debug = dbg('semantic-release:gh-pages')
 
 export {
+  DEFAULT_BASE_DIR,
   DEFAULT_BRANCH,
   DEFAULT_SRC,
   DEFAULT_MSG,
@@ -76,7 +78,7 @@ export const getRepoUrl = async (pluginConfig: TAnyMap, context: TContext, enter
   debug('urlFromPackage= %s', urlFromPackage)
 
   if (GITIO_REPO_PATTERN.test(url)) {
-    const res: any = await request('GET', urlFromOpts, { followRedirects: false, timeout: 5000 })
+    const res = await request('GET', urlFromOpts, { followRedirects: false, timeout: 5000 })
     url = res.headers.location
   }
 
@@ -129,6 +131,7 @@ export const resolveConfig = async (pluginConfig: TAnyMap, context: TContext, pa
   const {
     branches,
     branch = DEFAULT_BRANCH,
+    dir = DEFAULT_BASE_DIR,
     msg = DEFAULT_MSG,
     src = DEFAULT_SRC,
     dst = DEFAULT_DST,
@@ -151,6 +154,7 @@ export const resolveConfig = async (pluginConfig: TAnyMap, context: TContext, pa
   debug('pullTagsBranch= %s', pullTagsBranch)
 
   return {
+    dir,
     src,
     dst,
     msg,

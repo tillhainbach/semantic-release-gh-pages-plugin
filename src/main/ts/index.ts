@@ -1,9 +1,7 @@
 /** @module semantic-release-gh-pages-plugin */
 
 import AggregateError from 'aggregate-error'
-import fs from 'fs'
 import { isEqual } from 'lodash'
-import path from 'path'
 
 import { resolveConfig } from './config'
 import { publish as ghpagesPublish } from './ghpages'
@@ -17,7 +15,7 @@ let _config: any
 export const verifyConditions = async (pluginConfig: any, context: TContext) => {
   const { logger } = context
   const config = await resolveConfig(pluginConfig, context, undefined, 'publish')
-  const { token, repo, src, ciBranch, docsBranch } = config
+  const { token, repo, ciBranch, docsBranch } = config
 
   if (!docsBranch) {
     logger.log(`gh-pages [skipped]: 'docsBranch' is empty for ${ciBranch}`)
@@ -33,11 +31,6 @@ export const verifyConditions = async (pluginConfig: any, context: TContext) => 
 
   if (!repo) {
     throw new AggregateError(['package.json repository.url does not match github.com pattern'])
-  }
-
-  if (!fs.existsSync(src) || !fs.lstatSync(src).isDirectory()) {
-    logger.error('Resolved docs src path=', path.resolve(src))
-    throw new AggregateError(['docs source directory does not exist'])
   }
 
   Object.assign(pluginConfig, config)

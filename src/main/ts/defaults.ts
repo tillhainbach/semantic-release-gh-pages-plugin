@@ -2,7 +2,8 @@
 
 export const PLUGIN_PATH = '@qiwi/semantic-release-gh-pages-plugin'
 export const DEFAULT_BRANCH = 'gh-pages'
-export const DEFAULT_SRC = 'docs'
+export const DEFAULT_SRC = '**/*'
+export const DEFAULT_BASE_DIR = "."
 export const DEFAULT_DST = '.'
 export const DEFAULT_MSG = 'docs updated <%= nextRelease.gitTag %>'
 export const DEFAULT_ENTERPRISE = false

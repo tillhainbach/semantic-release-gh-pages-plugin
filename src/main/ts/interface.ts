@@ -27,7 +27,8 @@ export type TContext = Context & {
 }
 
 export interface IGhpagesPluginConfig {
-  src: string,
+  dir: string,
+  src: string | string[],
   dst: string,
   ciBranch: string,
   docsBranch: string,

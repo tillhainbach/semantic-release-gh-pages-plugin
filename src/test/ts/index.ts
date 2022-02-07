@@ -4,6 +4,7 @@ import fs from 'fs'
 import path from 'path'
 
 import {
+  DEFAULT_BASE_DIR,
   DEFAULT_BRANCH,
   DEFAULT_DST,
   DEFAULT_ENTERPRISE,
@@ -80,6 +81,7 @@ describe('index', () => {
       const result = await verifyConditions(pluginConfig, context)
 
       expect(pluginConfig).toEqual({
+        dir: DEFAULT_BASE_DIR,
         docsBranch: DEFAULT_BRANCH,
         msg: DEFAULT_MSG,
         dst: DEFAULT_DST,
@@ -201,7 +203,8 @@ describe('index', () => {
         repo: await getRepoUrl(pluginConfig, context, false),
         branch: 'doc-branch',
         message: 'docs updated v{{=it.nextRelease.gitTag}}',
-        dest: 'root'
+        dest: 'root',
+        src: DEFAULT_SRC,
       }
       const execaOpts = {
         cwd,
@@ -226,9 +229,9 @@ describe('index', () => {
       )
 
       expect(log).toHaveBeenCalledWith('Publishing docs via gh-pages')
-      expect(log).toHaveBeenCalledWith('Docs published successfully, branch=doc-branch, src=docs, dst=root')
+      expect(log).toHaveBeenCalledWith('Docs published successfully, branch=doc-branch, src=./**/*, dst=root')
 
-      expect(ghpagesPublish).toHaveBeenCalledWith(DEFAULT_SRC, expectedOpts, expect.any(Function))
+      expect(ghpagesPublish).toHaveBeenCalledWith(DEFAULT_BASE_DIR, expectedOpts, expect.any(Function))
       expect(res).toBe(OK)
     })
 
@@ -249,7 +252,7 @@ describe('index', () => {
       await publish(pluginConfig, context)
 
       expect(log).toHaveBeenCalledWith('Publishing docs via gh-pages')
-      expect(log).toHaveBeenCalledWith('Docs published successfully, branch=gh-pages, src=docs, dst=.')
+      expect(log).toHaveBeenCalledWith('Docs published successfully, branch=gh-pages, src=./**/*, dst=.')
     })
 
     it('throws rejection on gh-pages fail', async () => {
@@ -289,38 +292,22 @@ describe('index', () => {
       }
     })
 
-    it('throws an error when docs directory does not exist', async () => {
-      const { publish } = require('../../main/ts')
-      const AggregateError = require('aggregate-error')
-      const context = {
-        logger,
-        options: {
-          ...globalConfig,
-          [step]: [{ path, src: 'notExistingDirectory' }]
-        },
-        cwd,
-        env: { GITHUB_TOKEN: token }
-      }
+    // it('throws an error when docs directory does not exist', async () => {
+    //   const { publish } = require('../../main/ts')
+    //   const AggregateError = require('aggregate-error')
+    //   const context = {
+    //     logger,
+    //     options: {
+    //       ...globalConfig,
+    //       [step]: [{ path, src: 'notExistingDirectory' }]
+    //     },
+    //     cwd,
+    //     env: { GITHUB_TOKEN: token }
+    //   }
 
-      await expect(publish({}, context))
-        .rejects.toEqual(new AggregateError(['docs source directory does not exist']))
-    })
+    //   await expect(publish({}, context))
+    //     .rejects.toEqual(new AggregateError(['docs source directory does not exist']))
+    // })
 
-    it('throws an error when docs is a file rather than directory', async () => {
-      const { publish } = require('../../main/ts')
-      const AggregateError = require('aggregate-error')
-      const context = {
-        logger,
-        options: {
-          ...globalConfig,
-          [step]: [{ path, src: DOCS_AS_FILE }]
-        },
-        cwd,
-        env: { GITHUB_TOKEN: token }
-      }
-
-      await expect(publish({}, context))
-        .rejects.toEqual(new AggregateError(['docs source directory does not exist']))
-    })
   })
 })

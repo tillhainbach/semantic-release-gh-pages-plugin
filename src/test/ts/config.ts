@@ -1,4 +1,5 @@
 import {
+  DEFAULT_BASE_DIR,
   DEFAULT_BRANCH,
   DEFAULT_DST,
   DEFAULT_ENTERPRISE,
@@ -106,6 +107,7 @@ describe('config', () => {
         pullTagsBranch: 'dev'
       }
       const extra = {
+        dir: 'docs',
         enterprise: true,
         src: 'docsdocs',
         dst: 'root'
@@ -125,6 +127,7 @@ describe('config', () => {
       const config = await resolveConfig(pluginConfig, context, path, step)
 
       expect(config).toEqual({
+        dir: 'docs',
         src: 'docsdocs',
         dst: 'root',
         enterprise: true,
@@ -149,8 +152,9 @@ describe('config', () => {
         repositoryUrl: 'https://enterprise.com/org/repo.git'
       }
       const extra = {
+        dir: "docs",
         enterprise: true,
-        src: 'docsdocs',
+        src: '*.html',
         dst: 'root',
         branch: 'aaa',
         branches: [['foo', 'bar'], ['baz', 'qux']],
@@ -171,7 +175,8 @@ describe('config', () => {
       const config = await resolveConfig(pluginConfig, context, path, step)
 
       expect(config).toEqual({
-        src: 'docsdocs',
+        dir: 'docs',
+        src: '*.html',
         dst: 'root',
         enterprise: true,
         ciBranch: 'foo',
@@ -207,6 +212,7 @@ describe('config', () => {
       delete process.env.DEBUG
 
       expect(config).toEqual({
+        dir: DEFAULT_BASE_DIR,
         docsBranch: DEFAULT_BRANCH,
         dst: DEFAULT_DST,
         enterprise: DEFAULT_ENTERPRISE,
@@ -286,6 +292,7 @@ describe('config', () => {
         dst: DEFAULT_DST,
         enterprise: true,
         msg: DEFAULT_MSG,
+        dir: DEFAULT_BASE_DIR,
         src: 'dist/web',
         token: 'secure',
         repo: `https://secure@github-enterprise-repo-url.com/foo/bar.git`,
@@ -333,7 +340,7 @@ describe('config', () => {
   })
 
   describe('#getRepoUrl', () => {
-    it('returns proper value', () => {
+    it('returns proper value', async () => {
       const cases: Array<{pluginConfig: TAnyMap, context: TContext, enterprise?: boolean, result: string}> =
         [
           {
@@ -423,11 +430,12 @@ describe('config', () => {
           }
         ]
 
-      return Promise.all(
-        cases.map(({ pluginConfig, context, result, enterprise }) =>
-          expect(getRepoUrl(pluginConfig, context, !!enterprise)).resolves.toBe(result)
-        )
-      )
+      // Ain't pretty but avoids "open handles potentially keeping Jest from exiting"
+      for (const aCase of cases) {
+        const { pluginConfig, context, result, enterprise } = aCase;
+        expect(await getRepoUrl(pluginConfig, context, !!enterprise)).toBe(result)
+      }
+
     })
   })
 })

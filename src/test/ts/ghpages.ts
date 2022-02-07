@@ -26,6 +26,7 @@ describe('ghpages', () => {
   })
 
   const pushOptsStub = {
+    dir: 'stub',
     message: 'stub',
     logger: console,
     env: {},
