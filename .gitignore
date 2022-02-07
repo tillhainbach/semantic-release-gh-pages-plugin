@@ -22,7 +22,6 @@ build
 dist
 bundle
 lib
-target
 
 # Docs
 docs
@@ -39,8 +38,6 @@ jspm_packages/
 
 .idea
 *.iml
-typings
-flow-typed
 
 # Typescript
 *.tsbuildinfo
